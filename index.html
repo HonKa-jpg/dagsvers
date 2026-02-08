@@ -1,41 +1,53 @@
 <!doctype html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dagens vers (Bibel 2000)</title>
-  <style>
-    body{margin:0;padding:12px;font-family:system-ui,-apple-system,Segoe UI,Roboto;background:transparent}
-    .verse{font-size:14px;line-height:1.45;font-weight:700}
-    .btn{display:inline-block;margin-top:10px;padding:8px 10px;border-radius:10px;text-decoration:none;
-         border:1px solid rgba(0,0,0,.18);font-size:13px}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dagens vers</title>
+<style>
+body {
+  margin:0;
+  padding:12px;
+  font-family: system-ui;
+  background: transparent;
+}
+.verse {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.ref {
+  margin-top: 8px;
+  font-weight: bold;
+  font-size: 13px;
+  opacity: 0.8;
+}
+</style>
 </head>
 <body>
-  <div id="out">Laddar…</div>
 
-  <script>
-    function dayOfYear(d){
-      const start = new Date(d.getFullYear(),0,0);
-      return Math.floor((d - start) / 86400000); // 1..366
-    }
+<div id="content">Laddar...</div>
 
-    async function run(){
-      const res = await fetch("./verses.json", { cache: "no-store" });
-      const verses = await res.json();
+<script>
+function dayOfYear(d){
+  const start = new Date(d.getFullYear(),0,0);
+  return Math.floor((d - start) / 86400000);
+}
 
-      const d = new Date();
-      const idx = (dayOfYear(d) - 1) % verses.length; // 0..len-1
-      const v = verses[idx];
+async function run(){
+  const res = await fetch("./verses.json");
+  const verses = await res.json();
 
-      const url = `https://www.bible.com/sv/bible/154/${v.code}.B2000`;
+  const d = new Date();
+  const idx = (dayOfYear(d) - 1) % verses.length;
+  const v = verses[idx];
 
-      document.getElementById("out").innerHTML =
-        `<div class="verse">${v.label} (Bibel 2000)</div>` +
-        `<a class="btn" href="${url}" target="_blank" rel="noopener noreferrer">Öppna versen</a>`;
-    }
-    run();
-  </script>
+  document.getElementById("content").innerHTML =
+    "<div class='verse'>" + v.text + "</div>" +
+    "<div class='ref'>" + v.label + " (Bibel 2000)</div>";
+}
+
+run();
+</script>
+
 </body>
 </html>
-
