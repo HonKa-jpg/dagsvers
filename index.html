@@ -1,35 +1,49 @@
 <!doctype html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dagens vers</title>
-  <style>
-    body { margin:0; padding:10px; font-family: system-ui; }
-    .verse { font-size: 14px; line-height: 1.4; }
-    .ref { margin-top: 8px; font-weight: bold; font-size: 13px; opacity: .8; }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dagens vers</title>
+<style>
+body {
+  margin:0;
+  padding:12px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto;
+  background: transparent;
+}
+.verse {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.ref {
+  margin-top: 8px;
+  font-weight: bold;
+  font-size: 13px;
+  opacity: 0.8;
+}
+</style>
 </head>
 <body>
 
-<div id="verse">Laddar dagens vers...</div>
+<div id="content">Laddar dagens vers...</div>
 
 <script>
-fetch("https://www.bible.com/sv/verse-of-the-day")
-.then(r => r.text())
-.then(html => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
+async function loadVerse() {
+  const today = new Date();
+  const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
 
-  const verse = doc.querySelector("p");
-  const ref = doc.querySelector("h1");
+  const response = await fetch("https://beta.ourmanna.com/api/v1/get/?format=json&order=daily");
+  const data = await response.json();
 
-  if (verse && ref) {
-    document.getElementById("verse").innerHTML =
-      "<div class='verse'>" + verse.innerText + "</div>" +
-      "<div class='ref'>" + ref.innerText + "</div>";
-  }
-});
+  const verse = data.verse.details.text;
+  const ref = data.verse.details.reference;
+
+  document.getElementById("content").innerHTML =
+    "<div class='verse'>" + verse + "</div>" +
+    "<div class='ref'>" + ref + "</div>";
+}
+
+loadVerse();
 </script>
 
 </body>
