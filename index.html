@@ -5,41 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Verse of the Day</title>
 <style>
-  body { margin:0; padding:12px; font-family: system-ui, -apple-system, Segoe UI, Roboto; background: transparent; }
-  .verse { font-size: 14px; line-height: 1.5; }
-  .ref { margin-top: 8px; font-weight: 700; font-size: 13px; opacity: 0.85; }
-  .err { font-size: 13px; opacity: 0.8; font-style: italic; }
+  body {
+    margin:0;
+    padding:12px;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto;
+    background: transparent;
+  }
+  .verse {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .ref {
+    margin-top: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    opacity: 0.85;
+  }
 </style>
 </head>
 <body>
 
-<div id="content">Loading verse…</div>
+<div id="content">Loading verse...</div>
 
 <script>
 async function run(){
   try {
-    // Free, simple Verse of the Day API (English)
-    const res = await fetch("https://beta.ourmanna.com/api/v1/get/?format=json&order=daily", { cache: "no-store" });
+    const res = await fetch(
+      "https://beta.ourmanna.com/api/v1/get/?format=json&order=daily",
+      { cache: "no-store" }
+    );
     const data = await res.json();
 
-    const text = data?.verse?.details?.text || "";
-    const ref  = data?.verse?.details?.reference || "";
-
-    if (!text) throw new Error("No verse text returned");
+    const text = data.verse.details.text;
+    const ref  = data.verse.details.reference;
 
     document.getElementById("content").innerHTML =
-      `<div class="verse">${escapeHtml(text)}</div>` +
-      `<div class="ref">${escapeHtml(ref)}</div>`;
+      "<div class='verse'>" + text + "</div>" +
+      "<div class='ref'>" + ref + "</div>";
   } catch (e) {
-    document.getElementById("content").innerHTML =
-      `<div class="err">Could not load verse right now.</div>`;
+    document.getElementById("content").innerText =
+      "Unable to load verse right now.";
   }
-}
-
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
 }
 
 run();
