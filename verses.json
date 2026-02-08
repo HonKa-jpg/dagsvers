@@ -1,5 +1,14 @@
 [
-  {"code":"JHN.3.16","label":"Johannes 3:16"},
-  {"code":"PSA.23.1","label":"Psaltaren 23:1"},
-  {"code":"ISA.41.10","label":"Jesaja 41:10"}
+  {
+    "label": "Johannes 3:16",
+    "text": "Så älskade Gud världen att han gav den sin ende son..."
+  },
+  {
+    "label": "Psaltaren 23:1",
+    "text": "Herren är min herde, ingenting skall fattas mig."
+  },
+  {
+    "label": "Jesaja 41:10",
+    "text": "Var inte rädd, jag är med dig..."
+  }
 ]
