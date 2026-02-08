@@ -1,14 +1,12 @@
 [
-  {
-    "label": "Johannes 3:16",
-    "text": "Så älskade Gud världen att han gav den sin ende son..."
-  },
-  {
-    "label": "Psaltaren 23:1",
-    "text": "Herren är min herde, ingenting skall fattas mig."
-  },
-  {
-    "label": "Jesaja 41:10",
-    "text": "Var inte rädd, jag är med dig..."
-  }
+  {"label":"1 januari — Jesaja 41:10","text":""},
+  {"label":"2 januari — Psaltaren 23:1","text":""},
+  {"label":"3 januari — Johannes 3:16","text":""},
+  {"label":"4 januari — Filipperbrevet 4:6","text":""},
+  {"label":"5 januari — Romarbrevet 8:28","text":""},
+  {"label":"6 januari — Matteus 6:33","text":""},
+  {"label":"7 januari — Ordspråksboken 3:5","text":""},
+  {"label":"8 januari — Josua 1:9","text":""},
+  {"label":"9 januari — Hebreerbrevet 11:1","text":""},
+  {"label":"10 januari — 2 Korinthierbrevet 5:7","text":""}
 ]
