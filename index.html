@@ -5,81 +5,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Verse of the Day</title>
 <style>
-  html, body {
-    height: 100%;
-    margin: 0;
-  }
-  body {
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-    background: transparent;
-    padding: 10px;
-    box-sizing: border-box;
-
-    /* makes it look good even if Start.me forces a tall box */
-    display: flex;
-    align-items: center;   /* vertical center */
-    justify-content: center;
-  }
-
-  .card{
-    width: 100%;
-    max-width: 520px;
-    padding: 10px 12px;
-    box-sizing: border-box;
-  }
-
-  .verse {
-    font-size: 14px;
-    line-height: 1.35;
-    margin: 0;
-  }
-
-  .ref {
-    margin-top: 8px;
-    font-weight: 700;
-    font-size: 12.5px;
-    opacity: 0.8;
-  }
-
-  .err {
-    font-size: 13px;
-    opacity: 0.85;
-    font-style: italic;
-  }
+  html, body { margin:0; padding:0; background: transparent; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+  .wrap { padding: 10px 12px; }
+  .verse { font-size: 14px; line-height: 1.35; margin: 0; }
+  .ref { margin-top: 8px; font-weight: 700; font-size: 12.5px; opacity: .8; }
+  .err { font-size: 13px; opacity: .85; font-style: italic; }
 </style>
 </head>
 <body>
 
-<div class="card" id="content">Loading…</div>
+<div class="wrap" id="content">Loading…</div>
 
 <script>
 async function run(){
   try {
-    const res = await fetch(
-      "https://beta.ourmanna.com/api/v1/get/?format=json&order=daily",
-      { cache: "no-store" }
-    );
+    const res = await fetch("https://beta.ourmanna.com/api/v1/get/?format=json&order=daily", { cache: "no-store" });
     const data = await res.json();
 
     const text = data?.verse?.details?.text || "";
     const ref  = data?.verse?.details?.reference || "";
-
     if (!text) throw new Error("No verse text");
 
     document.getElementById("content").innerHTML =
-      `<p class="verse">${escapeHtml(text)}</p>` +
-      `<div class="ref">${escapeHtml(ref)}</div>`;
+      `<p class="verse">${escapeHtml(text)}</p><div class="ref">${escapeHtml(ref)}</div>`;
+
+    requestAnimationFrame(resizeToContent);
   } catch (e) {
-    document.getElementById("content").innerHTML =
-      `<div class="err">Unable to load verse right now.</div>`;
+    document.getElementById("content").innerHTML = `<div class="err">Unable to load verse right now.</div>`;
+    requestAnimationFrame(resizeToContent);
   }
 }
 
 function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+  return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 }
+
+function resizeToContent(){
+  const h = Math.ceil(document.documentElement.scrollHeight);
+  // If Start.me listens for this, it will resize the widget.
+  window.parent?.postMessage({ type: "setHeight", height: h }, "*");
+}
+
+new ResizeObserver(resizeToContent).observe(document.documentElement);
+window.addEventListener("resize", resizeToContent);
+
 run();
 </script>
 
