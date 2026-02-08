@@ -5,17 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Verse of the Day</title>
 <style>
-  html, body { height: 100%; margin: 0; }
-  body{
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
     background: transparent;
     display: flex;
-    align-items: flex-start;   /* << changed */
+    align-items: flex-start;
     justify-content: center;
     padding: 10px;
     box-sizing: border-box;
   }
-  .card{
+
+  .card {
     width: 100%;
     max-width: 520px;
     background: rgba(255,255,255,0.06);
@@ -23,11 +28,30 @@
     border-radius: 14px;
     padding: 12px;
     box-sizing: border-box;
-    margin-top: 6px;          /* << small consistent top spacing */
+    margin-top: 6px;
   }
-  .verse{ font-size: 14px; line-height: 1.35; margin: 0; }
-  .ref{ margin-top: 8px; font-weight: 700; font-size: 12.5px; opacity: .8; }
-  .err{ font-size: 13px; opacity: .85; font-style: italic; }
+
+  .verse {
+    font-size: 14px;
+    line-height: 1.35;
+    margin: 0;
+    color: #f1f1f1; /* white text */
+  }
+
+  .ref {
+    margin-top: 8px;
+    font-weight: 700;
+    font-size: 12.5px;
+    opacity: 0.85;
+    color: #f1f1f1; /* white text */
+  }
+
+  .err {
+    font-size: 13px;
+    opacity: 0.85;
+    font-style: italic;
+    color: #f1f1f1;
+  }
 </style>
 </head>
 <body>
