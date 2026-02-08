@@ -1,45 +1,49 @@
 <!doctype html>
-<html lang="sv">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dagens vers</title>
+<title>Verse of the Day</title>
 <style>
   body { margin:0; padding:12px; font-family: system-ui, -apple-system, Segoe UI, Roboto; background: transparent; }
   .verse { font-size: 14px; line-height: 1.5; }
   .ref { margin-top: 8px; font-weight: 700; font-size: 13px; opacity: 0.85; }
-  .missing { font-size: 13px; opacity: 0.8; font-style: italic; }
+  .err { font-size: 13px; opacity: 0.8; font-style: italic; }
 </style>
 </head>
 <body>
-  <div id="content">Laddar…</div>
+
+<div id="content">Loading verse…</div>
 
 <script>
-function dayOfYear(d){
-  const start = new Date(d.getFullYear(),0,0);
-  return Math.floor((d - start) / 86400000); // 1..366
-}
-
 async function run(){
-  const res = await fetch("./verses.json", { cache: "no-store" });
-  const verses = await res.json();
+  try {
+    // Free, simple Verse of the Day API (English)
+    const res = await fetch("https://beta.ourmanna.com/api/v1/get/?format=json&order=daily", { cache: "no-store" });
+    const data = await res.json();
 
-  const d = new Date();
-  const idx = (dayOfYear(d) - 1) % verses.length;
-  const v = verses[idx];
+    const text = data?.verse?.details?.text || "";
+    const ref  = data?.verse?.details?.reference || "";
 
-  const text = (v.text || "").trim();
-  document.getElementById("content").innerHTML =
-    (text ? `<div class="verse">${escapeHtml(text)}</div>`
-          : `<div class="missing">Saknas text för idag (lägg in i verses.json)</div>`)
-    + `<div class="ref">${escapeHtml(v.label)} — Bibel 2000</div>`;
+    if (!text) throw new Error("No verse text returned");
+
+    document.getElementById("content").innerHTML =
+      `<div class="verse">${escapeHtml(text)}</div>` +
+      `<div class="ref">${escapeHtml(ref)}</div>`;
+  } catch (e) {
+    document.getElementById("content").innerHTML =
+      `<div class="err">Could not load verse right now.</div>`;
+  }
 }
 
 function escapeHtml(s){
-  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
 }
 
 run();
 </script>
+
 </body>
 </html>
